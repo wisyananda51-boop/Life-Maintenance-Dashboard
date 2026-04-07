@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisaMasa - Ultimate LifeOS</title>
+    <link rel="stylesheet" href="cnth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="logo">SM.</div>
+        <div class="menu-items">
+            <div class="menu-icon active" onclick="switchView('home')" id="btn-home" title="Dashboard">🏠</div>
+            <div class="menu-icon" onclick="switchView('calendar')" id="btn-calendar" title="Calendar">📅</div>
+
+            <div class="menu-icon" onclick="switchView('health')" id="btn-health" title="Health">🧘</div>
+            <div class="menu-icon" onclick="switchView('habits')" id="btn-habits" title="Habits">☕</div>
+
+            <div class="menu-icon" onclick="switchView('focus')" id="btn-focus" title="Focus">⏳</div>
+            <div class="menu-icon" onclick="switchView('goals')" id="btn-goals" title="Goals">🎯</div>
+            <div class="menu-icon" onclick="switchView('brain')" id="btn-brain" title="Brain">🧠</div>
+
+            <div class="menu-icon" onclick="switchView('finance')" id="btn-finance" title="Finance">💳</div>
+            <div class="menu-icon" onclick="switchView('random')" id="btn-random" title="Random">🧾</div>
+        </div>
+        <div class="bottom-menu">
+            <div class="menu-icon" onclick="switchView('settings')" id="btn-settings" title="Pengaturan">⚙️</div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <header class="top-bar">
+            <div class="title-section">
+                <h1 id="page-title">Life Operating System</h1>
+                <span id="system-status-badge" class="status-badge status-operational">System: Operational 🟢</span>
+            </div>
+            <div class="user-profile">
+                <span>M. Wisyananda</span>
+                <div class="avatar">MW</div>
+            </div>
+        </header>
+
+        <div id="view-home" class="view-section">
+            <div class="insight-banner mb-4">
+                <div class="insight-icon">💡</div>
+                <div class="insight-text">
+                    <h4 style="color:#b388ff;font-size:0.75rem;margin-bottom:2px">SYSTEM INSIGHT</h4>
+                    <p id="system-insight-text" style="font-size:0.9rem">Menganalisis pola hidup...</p>
+                </div>
+            </div>
+            <div class="stats-grid-row">
+                <div class="card stat-card-modern">
+                    <div class="card-header-modern"><span>Sisa Uang</span><button onclick="addBalance()"
+                            class="btn-icon-small">+</button></div>
+                    <div class="card-value-modern" id="display-saldo">Rp 0</div>
+                    <div class="card-footer-modern"><span class="trend-up" style="color:#666; font-size:0.75rem;">Limit:
+                            Rp 50.000</span></div>
+                </div>
+                <div class="card stat-card-modern">
+                    <div class="card-header-modern"><span>Mental Battery</span></div>
+                    <div class="card-value-modern text-purple" id="home-mental-days">0 Hari</div>
+                    <div class="card-footer-modern"><span class="text-muted"
+                            style="color:#666; font-size:0.75rem;">Sejak istirahat terakhir</span></div>
+                </div>
+                <div class="card stat-card-modern">
+                    <div class="card-header-modern"><span>Critical Items</span></div>
+                    <div class="card-value-modern text-danger" id="maintenance-count">0</div>
+                    <div class="card-footer-modern"><span class="text-danger-soft"
+                            style="color:#666; font-size:0.75rem;">Butuh tindakan</span></div>
+                </div>
+                <div class="card stat-card-modern">
+                    <div class="card-header-modern"><span>Total Event</span></div>
+                    <div class="card-value-modern text-success" id="total-event-count">0</div>
+                    <div class="card-footer-modern"><span class="text-success"
+                            style="color:#00e676; font-size:0.75rem;">Total Tracking</span></div>
+                </div>
+            </div>
+            <div class="dashboard-split-row">
+                <div class="card chart-card-modern">
+                    <div class="card-header-modern mb-4">
+                        <h3>Tren Saldo</h3><span class="badge-tag">7 Hari</span>
+                    </div>
+                    <div class="chart-container-modern"><canvas id="financeChart"></canvas></div>
+                </div>
+                <div class="card list-card-modern">
+                    <div class="card-header-modern mb-3">
+                        <h3>Prioritas Maintenance</h3><button onclick="toggleForm('item')"
+                            class="btn-icon-plus">+</button>
+                    </div>
+                    <div id="form-item" class="form-card-purple mb-3" style="display:none;"><input id="new-item-name"
+                            placeholder="Nama" class="input-modern-clean">
+                        <div class="row-mini mt-2"><select id="new-item-cat" class="input-modern-clean"
+                                style="width:100%;cursor:pointer">
+                                <option value="Safety">🔴 Safety</option>
+                                <option value="Health">🟠 Health</option>
+                                <option value="Comfort">🟡 Comfort</option>
+                            </select><input id="new-item-days" placeholder="Hari" class="input-modern-clean"></div>
+                        <button onclick="addNewItem()" class="btn-full-purple mt-2">Simpan</button>
+                    </div>
+                    <ul id="item-list" class="maintenance-list"></ul>
+                </div>
+            </div>
+            <div class="card timeline-card mt-4">
+                <div class="card-header-modern mb-3">
+                    <h3>Aktivitas</h3>
+                </div>
+                <div style="height:180px;margin-bottom:10px"><canvas id="activityChart"></canvas></div>
+                <div id="timeline-container" class="timeline-container"></div>
+            </div>
+        </div>
+
+        <div id="view-calendar" class="view-section" style="display: none;">
+            <div class="calendar-layout">
+                <div class="card full-calendar-card">
+                    <div class="calendar-header-large"><button onclick="changeMonth(-1)" class="btn-nav">&lt;</button>
+                        <h2 id="cal-month-year">Month Year</h2><button onclick="changeMonth(1)"
+                            class="btn-nav">&gt;</button>
+                    </div>
+                    <div class="calendar-days-name">
+                        <div>Su</div>
+                        <div>Mo</div>
+                        <div>Tu</div>
+                        <div>We</div>
+                        <div>Th</div>
+                        <div>Fr</div>
+                        <div>Sa</div>
+                    </div>
+                    <div class="calendar-grid-large" id="full-calendar-grid"></div>
+                </div>
+                <div class="card transaction-log-card">
+                    <div class="log-header">
+                        <h3>Log: <span id="selected-date-text" class="text-purple">Hari Ini</span></h3><span
+                            id="daily-total" class="badge-total">Rp 0</span>
+                    </div>
+                    <div class="input-container-cal">
+                        <input type="text" id="daily-desc" class="input-dark mb-2" placeholder="Kegiatan...">
+                        <input type="number" id="daily-price" class="input-dark mb-2" placeholder="Pengeluaran (Rp)">
+                        <div class="checkbox-wrapper"><input type="checkbox" id="daily-cut-balance" checked><label
+                                for="daily-cut-balance">Potong Saldo Utama?</label></div>
+                        <button onclick="addDailyTransaction()" class="btn-full-purple mt-2">Simpan</button>
+                    </div>
+                    <ul id="transaction-list" class="transaction-list mt-4"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-health" class="view-section" style="display:none;">
+            <div class="card form-card-purple mb-4">
+                <h3>🧠 Mental</h3><input id="new-health-name" placeholder="Aktivitas..."
+                    class="input-modern-clean mt-2"><button onclick="addHealthItem()"
+                    class="btn-full-purple mt-2">Simpan</button>
+            </div>
+            <div class="card">
+                <div class="table-header"><span>AKTIVITAS</span><span>TERAKHIR</span><span>AKSI</span></div>
+                <ul id="health-list" class="data-list-modern"></ul>
+            </div>
+        </div>
+        <div id="view-habits" class="view-section" style="display:none;">
+            <div class="card form-card-purple mb-4">
+                <h3>☕ Habits</h3><input id="new-habit-name" placeholder="Kebiasaan..."
+                    class="input-modern-clean mt-2"><button onclick="addHabitItem()"
+                    class="btn-full-purple mt-2">Simpan</button>
+            </div>
+            <div class="card">
+                <div class="table-header"><span>KEBIASAAN</span><span>TERAKHIR</span><span>AKSI</span></div>
+                <ul id="habit-list" class="data-list-modern"></ul>
+            </div>
+        </div>
+
+        <div id="view-focus" class="view-section" style="display: none;">
+            <div class="focus-layout">
+                <div class="card focus-timer-card">
+                    <h2>Focus Room</h2>
+                    <div id="timer-display" class="timer-display">25:00</div>
+                    <div class="timer-controls"><button onclick="startTimer()" class="btn-timer btn-start">▶
+                            Start</button><button onclick="pauseTimer()" class="btn-timer btn-pause">⏸
+                            Pause</button><button onclick="resetTimer()" class="btn-timer btn-reset-time">↺
+                            Reset</button></div>
+                    <div class="mt-4" style="text-align: center;"><a href="https://www.youtube.com/watch?v=5qap5aO4i9A"
+                            target="_blank" class="btn-sound">🎵 Lofi Music</a></div>
+                </div>
+                <div class="card idea-card">
+                    <div class="card-header-modern">
+                        <h3>⚡ Quick Idea Capture</h3>
+                    </div>
+                    <div class="input-group"><input type="text" id="quick-idea-input" class="input-dark"
+                            placeholder="Ide yang lewat..."><button onclick="addQuickIdea()" class="btn-add">✓</button>
+                    </div>
+                    <ul id="idea-list" class="data-list-modern mt-4"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-goals" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left:4px solid #69f0ae">
+                <div class="highlight-content">
+                    <h2>🎯 Goals</h2>
+                </div><button onclick="toggleForm('goal')" class="btn-primary-outline">+</button>
+            </div>
+            <div id="form-goal" class="add-form-container card mb-4" style="display:none;"><input id="goal-title"
+                    class="input-dark mb-2">
+                <div class="row-mini"><input id="goal-target" class="input-mini"><input id="goal-unit"
+                        class="input-mini"></div><button onclick="addGoal()" class="btn-mini-save"
+                    style="width:100%">Simpan</button>
+            </div>
+            <div id="goals-container" class="goals-grid"></div>
+        </div>
+        <div id="view-brain" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left:4px solid #7c4dff">
+                <div class="highlight-content">
+                    <h2>🧠 Brain</h2>
+                </div><button onclick="toggleForm('note')" class="btn-primary-outline">+</button>
+            </div>
+            <div id="form-note" class="add-form-container card mb-4" style="display:none;"><input id="note-title"
+                    class="input-dark mb-2"><textarea id="note-content" class="input-dark mb-2"></textarea><button
+                    onclick="addNote()" class="btn-mini-save" style="width:100%">Simpan</button></div>
+            <ul id="brain-list" class="data-list-modern"></ul>
+        </div>
+        <div id="view-finance" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left:4px solid #ffb74d">
+                <div class="highlight-content">
+                    <h2>💳 Subs</h2>
+                </div><button onclick="toggleForm('sub')" class="btn-primary-outline">+</button>
+            </div>
+            <div id="form-sub" class="add-form-container card mb-4" style="display:none;"><input id="sub-name"
+                    class="input-dark mb-2">
+                <div class="row-mini"><input id="sub-price" class="input-mini"><input id="sub-date" class="input-mini">
+                </div><button onclick="addSub()" class="btn-mini-save" style="width:100%">Simpan</button>
+            </div>
+            <ul id="subs-list" class="data-list-modern"></ul>
+        </div>
+        <div id="view-random" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left:4px solid #ff5252">
+                <div class="highlight-content">
+                    <h2>🧾 Random</h2>
+                </div>
+                <div class="text-purple" id="random-total-display">Rp 0</div>
+            </div>
+            <div class="card">
+                <div class="form-row-large">
+                    <div class="input-group-col"><label class="text-muted text-xs">Nama Item</label><input type="text"
+                            id="rand-name" class="input-dark" placeholder="Item"></div>
+                    <div class="input-group-col"><label class="text-muted text-xs">Nominal</label><input type="number"
+                            id="rand-price" class="input-dark" placeholder="Rp"></div>
+                </div>
+                <div class="checkbox-wrapper mt-3"><input type="checkbox" id="cut-balance" checked><label
+                        for="cut-balance">Potong Saldo Utama?</label></div><button onclick="addRandomExpense()"
+                    class="btn-full-purple mt-3">Simpan</button>
+                <ul id="random-list" class="maintenance-list mt-4"></ul>
+            </div>
+        </div>
+        <div id="view-journal" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left:4px solid #fff">
+                <div class="highlight-content">
+                    <h2>📔 Journal</h2>
+                </div>
+            </div>
+            <div class="card mb-4"><textarea id="journal-input" class="input-dark" rows="4"></textarea><button
+                    onclick="addJournal()" class="btn-full-purple mt-2">Simpan</button></div>
+            <div id="journal-list" class="timeline-container"></div>
+        </div>
+
+        <div id="view-settings" class="view-section" style="display: none;">
+            <div class="card highlight-card mb-4" style="border-left: 4px solid #aaa;">
+                <div class="highlight-content">
+                    <h2>⚙️ Pengaturan</h2>
+                    <p class="text-muted">Personalisasi sistem.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <ul class="settings-list">
+                    <li class="list-item-modern" onclick="toggleTheme()"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 15px 0;">
+                        <span style="font-weight: 500;">☀️ Mode Terang</span>
+                        <div class="toggle-switch" id="theme-toggle-icon">OFF</div>
+                    </li>
+
+                    <li class="list-item-modern" onclick="hardReset()"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: none;">
+                        <span style="color: #ff5252; font-weight: 500;">🗑️ Reset Semua Data</span>
+                        <span style="color: #666;">></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+    <script src="cnth.js"></script>
+</body>
+
+</html>
