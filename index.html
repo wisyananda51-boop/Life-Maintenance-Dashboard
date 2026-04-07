@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisaMasa - LifeOS</title>
+    <link rel="icon" type="image/png" href="image/logo-1.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div id="login-screen" class="space-login-wrapper">
+        <div class="glowing-star star-1">✦</div>
+        <div class="glowing-star star-2">✦</div>
+        <div class="glowing-star star-1">✦</div>
+        <div class="glowing-star star-2">✦</div>
+        <div class="glowing-star star-3">✦</div>
+        <div class="glowing-star star-4">✦</div>
+        <div class="glowing-star star-5">✦</div>
+        <div class="glowing-star star-6">✦</div>
+        <div class="glowing-star star-7">✦</div>
+
+        <div class="glass-card">
+            <div class="avatar-glow">
+                <i class="fa-solid fa-user-astronaut"></i>
+            </div>
+
+            <h2 class="welcome-text">Welcome to LifeOS<span style="color:#b388ff">✦</span>!</h2>
+            <p class="subtitle-text">Enter your credentials to authenticate and access your digital brain.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="text" class="glass-input" placeholder="First Name">
+                <input type="text" class="glass-input" placeholder="Last Name">
+            </div>
+            
+            <input type="email" class="glass-input" placeholder="Email Address">
+
+            <div style="position: relative;">
+                <input type="password" id="login-pin" class="glass-input" placeholder="Enter Password"
+                    style="letter-spacing: 2px;">
+                <i class="fa-solid fa-eye-slash"
+                    style="position: absolute; right: 15px; top: 15px; color: #888; cursor: pointer;"></i>
+            </div>
+
+            <div style="display: flex; align-items: flex-start; gap: 10px; text-align: left; margin: 15px 0 25px 0;">
+                <input type="checkbox" checked style="margin-top: 4px; accent-color: #b388ff;">
+                <span style="font-size: 0.75rem; color: #aaa;">I agree to authenticate this session and unlock the
+                    dashboard.</span>
+            </div>
+
+            <button onclick="checkLogin()" class="glass-btn">UNLOCK SYSTEM</button>
+            <p id="login-error" class="text-danger mt-3" style="display: none; font-size: 0.8rem;">Access Denied.
+                Incorrect Passcode.</p>
+        </div>
+    </div>
+
+    <nav class="sidebar">
+        <div class="logo">
+           <img src="image/logo-1.png" alt="Logo SisaMasa">
+        </div>
+        <div class="menu-items">
+            <div class="menu-icon active" onclick="switchView('home')" id="btn-home" title="Dashboard">
+                <i class="fa-solid fa-house"></i>
+            </div>
+            <div class="menu-icon" onclick="switchView('calendar')" id="btn-calendar" title="Calendar">
+                <i class="fa-solid fa-calendar"></i>
+            </div>
+
+            <div class="menu-icon" onclick="switchView('health')" id="btn-health" title="Health">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <div class="menu-icon" onclick="switchView('habits')" id="btn-habits" title="Habits">
+                <i class="fa-solid fa-coffee"></i>
+            </div>
+
+            <div class="menu-icon" onclick="switchView('focus')" id="btn-focus" title="Focus">
+                <i class="fa-solid fa-balance-scale"></i>
+            </div>
+            <div class="menu-icon" onclick="switchView('goals')" id="btn-goals" title="Goals">
+                <i class="fa-solid fa-flag"></i>
+            </div>
+            <div class="menu-icon" onclick="switchView('brain')" id="btn-brain" title="Brain">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+
+            <div class="menu-icon" onclick="switchView('finance')" id="btn-finance" title="Finance">
+                <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+            <div class="menu-icon" onclick="switchView('journal')" id="btn-journal" title="Journal">
+                <i class="fa-solid fa-pen"></i>
+            </div>
+            <div class="menu-icon" onclick="switchView('random')" id="btn-random" title="Random">
+                <i class="fa-solid fa-random"></i>
+            </div>
+        </div>
+        <div class="bottom-menu">
+            <div class="menu-icon" onclick="switchView('settings')" id="btn-settings" title="Pengaturan">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <header class="top-bar">
+            <div class="title-section">
+                <h1 id="page-title" class="jd-awal">Life Operating System</h1>
+                <span id="system-status-badge" class="status-badge status-operational">System: Operational <i
+                        class="fa-solid fa-check"></i></span>
+            </div>
+            <div class="user-profile">
+                <span>M. Wisyananda</span>
+                <div class="avatar">MW</div>
+            </div>
+        </header>
+
+        <div id="view-home" class="view-section">
+            <div class="insight-banner mb-4">
+                <div class="insight-icon">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div class="insight-text">
+                    <h4 style="color:#b388ff;font-size:0.75rem;margin-bottom:2px">SYSTEM INSIGHT</h4>
+                    <p id="system-insight-text" style="font-size:0.9rem">Menganalisis pola hidup...</p>
+                </div>
+            </div>
+            <div class="stats-grid-row">
+                <div class="card stat-card-modern">
+                    <div class="card-header-modern"><span>Sisa Uang</span><button onclick="addBalance()"
+                            class="btn-icon-small">+</button></div>
+                    <div class="card-value-modern" id="display-saldo">Rp 0</div>
+                    <div class="card-footer-modern"><span class="trend-up" style="color:#666; font-size:0.75rem;">Limit:
+                            Rp 50.000</span></div>
+                </div>
+                <div class="card stat-card-modern">
+                    <div class="card-header-modern"><span>Mental Battery</span></div>
+                    <div class="card-value-modern text-purple" id="home-mental-days">0 Hari</div>
+                    <div class="card-footer-modern"><span class="text-muted"
+                            style="color:#666; font-size:0.75rem;">Sejak istirahat terakhir</span></div>
+                </div>
+                <div class="card stat-card-modern">
+                    <div class="card-header-modern"><span>Critical Items</span></div>
+                    <div class="card-value-modern text-danger" id="maintenance-count">0</div>
+                    <div class="card-footer-modern"><span class="text-danger-soft"
+                            style="color:#666; font-size:0.75rem;">Butuh tindakan</span></div>
+                </div>
+                <div class="card stat-card-modern">
+                    <div class="card-header-modern"><span>Total Event</span></div>
+                    <div class="card-value-modern text-success" id="total-event-count">0</div>
+                    <div class="card-footer-modern"><span class="text-success"
+                            style="color:#00e676; font-size:0.75rem;">Total Tracking</span></div>
+                </div>
+            </div>
+            <div class="dashboard-split-row">
+                <div class="card chart-card-modern">
+                    <div class="card-header-modern mb-4">
+                        <h3>Tren Saldo</h3><span class="badge-tag">7 Hari</span>
+                    </div>
+                    <div class="chart-container-modern"><canvas id="financeChart"></canvas></div>
+                </div>
+                <div class="card list-card-modern">
+                    <div class="card-header-modern mb-3">
+                        <h3>Prioritas Maintenance</h3><button onclick="toggleForm('item')" class="btn-icon-plus"><i
+                                class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div id="form-item" class="form-card-purple mb-3" style="display:none;"><input id="new-item-name"
+                            placeholder="Nama" class="input-modern-clean">
+                        <div class="row-mini mt-2"><select id="new-item-cat" class="input-modern-clean"
+                                style="width:100%; cursor:pointer;">
+                                <option value="Safety">🔴 Safety</option>
+                                <option value="Health">🟠 Health</option>
+                                <option value="Comfort">🟡 Comfort</option>
+                            </select><input id="new-item-days" placeholder="Hari" class="input-modern-clean"></div>
+                        <button onclick="addNewItem()" class="btn-full-purple mt-2">Simpan</button>
+                    </div>
+                    <ul id="item-list" class="maintenance-list"></ul>
+                </div>
+            </div>
+            <div class="card timeline-card mt-4">
+                <div class="card-header-modern mb-3">
+                    <h3>Aktivitas & Frekuensi (7 Hari Terakhir)</h3>
+                </div>
+                <div style="height:180px;margin-bottom:10px"><canvas id="activityChart"></canvas></div>
+                <div id="timeline-container" class="timeline-container"></div>
+            </div>
+        </div>
+
+        <div id="view-calendar" class="view-section" style="display: none;">
+            <div class="calendar-layout">
+                <div class="card full-calendar-card">
+                    <div class="calendar-header-large"><button onclick="changeMonth(-1)" class="btn-nav">&lt;</button>
+                        <h2 id="cal-month-year">Month Year</h2><button onclick="changeMonth(1)"
+                            class="btn-nav">&gt;</button>
+                    </div>
+                    <div class="calendar-days-name">
+                        <div>Su</div>
+                        <div>Mo</div>
+                        <div>Tu</div>
+                        <div>We</div>
+                        <div>Th</div>
+                        <div>Fr</div>
+                        <div>Sa</div>
+                    </div>
+                    <div class="calendar-grid-large" id="full-calendar-grid"></div>
+                </div>
+                <div class="card transaction-log-card">
+                    <div class="log-header">
+                        <h3>Log: <span id="selected-date-text" class="text-purple">Hari Ini</span></h3><span
+                            id="daily-total" class="badge-total">Rp 0</span>
+                    </div>
+                    <div class="input-container-cal">
+                        <input type="text" id="daily-desc" class="input-dark mb-2" placeholder="Kegiatan...">
+                        <input type="number" id="daily-price" class="input-dark mb-2" placeholder="Pengeluaran (Rp)">
+                        <div class="checkbox-wrapper"><input type="checkbox" id="daily-cut-balance" checked><label
+                                for="daily-cut-balance">Potong Saldo Utama?</label></div>
+                        <button onclick="addDailyTransaction()" class="btn-full-purple mt-2">Simpan</button>
+                    </div>
+                    <ul id="transaction-list" class="transaction-list mt-4"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-health" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left: 4px solid #ff5252;">
+                <div class="highlight-content">
+                    <h2>
+                        <i class="fa-solid fa-brain"></i>
+                        Mental & Kesehatan
+                    </h2>
+                    <p class="text-muted">Pantau keseimbangan hidup.</p>
+                </div>
+                <button onclick="toggleForm('health')" class="btn-primary-outline">+ Tambah</button>
+            </div>
+            <div id="form-health" class="add-form-container card mb-4" style="display:none;">
+                <input id="new-health-name" placeholder="Aktivitas (ex: Lari)" class="input-dark mb-2">
+                <button onclick="addHealthItem()" class="btn-full-purple">Simpan</button>
+            </div>
+            <div class="card">
+                <div class="table-header"><span>AKTIVITAS</span><span>STATUS</span><span>AKSI</span></div>
+                <ul id="health-list" class="data-list-modern"></ul>
+            </div>
+        </div>
+
+        <div id="view-habits" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left: 4px solid #ffb74d;">
+                <div class="highlight-content">
+                    <h2>
+                        <i class="fa-solid fa-coffee"></i>
+                        Kebiasaan
+                    </h2>
+                    <p class="text-muted">Lacak rutinitas harian.</p>
+                </div>
+                <button onclick="toggleForm('habit')" class="btn-primary-outline">+ Tambah</button>
+            </div>
+            <div id="form-habit" class="add-form-container card mb-4" style="display:none;">
+                <input id="new-habit-name" placeholder="Kebiasaan (ex: Ngopi)" class="input-dark mb-2">
+                <button onclick="addHabitItem()" class="btn-full-purple">Simpan</button>
+            </div>
+            <div class="card">
+                <div class="table-header"><span>KEBIASAAN</span><span>STATUS</span><span>AKSI</span></div>
+                <ul id="habit-list" class="data-list-modern"></ul>
+            </div>
+        </div>
+
+        <div id="view-focus" class="view-section" style="display: none;">
+            <div class="focus-layout">
+
+                <div class="left-column" style="display: flex; flex-direction: column; gap: 20px;">
+
+                    <div class="card focus-timer-card">
+                        <h2>Focus Timer</h2>
+                        <div id="timer-display" class="timer-display">25:00</div>
+                        <div class="timer-settings mb-3"
+                            style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+                            <input type="number" id="focus-duration" class="input-mini" placeholder="mnt" value="25"
+                                style="width: 60px; text-align: center;">
+                            <span class="text-muted" style="font-size: 0.9rem;">Menit</span>
+                            <button onclick="setCustomTime()" class="btn-icon-small" title="Set Waktu">Set</button>
+                        </div>
+                        <div class="timer-controls">
+                            <button onclick="startTimer()" class="btn-timer btn-start"><i class="fa-solid fa-play"></i>
+                                Start</button>
+                            <button onclick="pauseTimer()" class="btn-timer btn-pause"><i class="fa-solid fa-pause"></i>
+                                Pause</button>
+                            <button onclick="resetTimer()" class="btn-timer btn-reset-time"><i
+                                    class="fa-solid fa-rotate-left"></i> Reset</button>
+                        </div>
+                    </div>
+
+                    <div class="card music-card">
+                        <div class="card-header-modern mb-2">
+                            <h3><i class="fa-solid fa-music"></i><span></span> Vibe Playlist</h3>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <select id="music-selector" class="input-mini" onchange="changeMusic()"
+                                    style="width: 130px; cursor: pointer;"></select>
+                                <button onclick="toggleForm('playlist')" class="btn-icon-small"
+                                    title="Tambah Playlist Baru">+</button>
+                            </div>
+                        </div>
+                        <div id="form-playlist" class="add-form-container mb-3" style="display:none;">
+                            <input type="text" id="new-playlist-name" placeholder="Nama (ex: Lagu Galau)"
+                                class="input-dark mb-2">
+                            <input type="text" id="new-playlist-url" placeholder="Link (Spotify / YouTube)"
+                                class="input-dark mb-2">
+                            <button onclick="addPlaylist()" class="btn-full-purple">Simpan</button>
+                        </div>
+                        <div class="music-embed-container">
+                            <iframe id="spotify-frame" style="border-radius:12px" src="" width="100%" height="152"
+                                frameBorder="0" allowfullscreen=""
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card idea-card" style="height: 100%;">
+                    <div class="card-header-modern mb-3">
+                        <h3><i class="fa-solid fa-lightbulb"></i>
+                            Quick Idea Capture</h3>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="quick-idea-input" class="input-dark" placeholder="Ide yang lewat...">
+                        <button onclick="addQuickIdea()" class="btn-add">✓</button>
+                    </div>
+                    <ul id="idea-list" class="data-list-modern mt-4"></ul>
+                </div>
+            </div>
+        </div>
+
+
+
+        </div>
+
+        <div id="view-goals" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left: 4px solid #69f0ae;">
+                <div class="highlight-content">
+                    <h2>
+                        <i class="fa-solid fa-trophy"></i>
+                        OKR & Goals
+                    </h2>
+                    <p class="text-muted">Target jangka panjang.</p>
+                </div>
+                <button onclick="toggleForm('goal')" class="btn-primary-outline">+ Target</button>
+            </div>
+            <div id="form-goal" class="add-form-container card mb-4" style="display:none;">
+                <input id="goal-title" class="input-dark mb-2" placeholder="Judul Target">
+                <div class="row-mini"><input id="goal-target" class="input-mini" placeholder="Target"><input
+                        id="goal-unit" class="input-mini" placeholder="Satuan"></div>
+                <button onclick="addGoal()" class="btn-full-purple mt-2">Simpan</button>
+            </div>
+            <div class="card">
+                <div class="table-header"><span>GOAL</span><span>PROGRESS</span><span>AKSI</span></div>
+                <div id="goals-container" class="list-container"></div>
+            </div>
+        </div>
+
+        <div id="view-brain" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left: 4px solid #7c4dff;">
+                <div class="highlight-content">
+                    <h2>
+                        <i class="fa-solid fa-brain"></i>
+                        Second Brain
+                    </h2>
+                    <p class="text-muted">Gudang ilmu & catatan.</p>
+                </div>
+                <button onclick="toggleForm('note')" class="btn-primary-outline">+ Catatan</button>
+            </div>
+            <div id="form-note" class="add-form-container card mb-4" style="display:none;">
+                <input id="note-title" class="input-dark mb-2" placeholder="Judul">
+                <textarea id="note-content" class="input-dark mb-2" placeholder="Masukan catatan..."></textarea>
+                <button onclick="addNote()" class="btn-full-purple">Simpan</button>
+            </div>
+            <div class="card">
+                <div class="table-header"><span>JUDUL</span><span>KATEGORI</span><span>AKSI</span></div>
+                <ul id="brain-list" class="data-list-modern"></ul>
+            </div>
+        </div>
+
+        <div id="view-finance" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left: 4px solid #ffb74d;">
+                <div class="highlight-content">
+                    <h2>
+                        <i class="fa-solid fa-hand-holding-usd"></i>
+                        Subscriptions
+                    </h2>
+                    <p class="text-muted">Kelola langganan.</p>
+                </div>
+                <button onclick="toggleForm('sub')" class="btn-primary-outline">+ Langganan</button>
+            </div>
+            <div id="form-sub" class="add-form-container card mb-4" style="display:none;">
+                <input id="sub-name" class="input-dark mb-2" placeholder="Nama Layanan">
+                <div class="row-mini"><input id="sub-price" class="input-mini" placeholder="Harga"><input id="sub-date"
+                        class="input-mini" placeholder="Tgl"></div>
+                <button onclick="addSub()" class="btn-full-purple mt-2">Simpan</button>
+            </div>
+            <div class="card">
+                <div class="table-header"><span>LAYANAN</span><span>TAGIHAN</span><span>AKSI</span></div>
+                <ul id="subs-list" class="data-list-modern"></ul>
+            </div>
+        </div>
+
+        <div id="view-random" class="view-section" style="display: none;">
+            <div class="card highlight-card mb-4" style="border-left: 4px solid #ff5252;">
+                <div class="highlight-content">
+                    <h2>
+                        <i class="fa-solid fa-list-ul"></i>
+                        Random Expenses
+                    </h2>
+                    <p class="text-muted">Pengeluaran tak terduga.</p>
+                </div>
+                <div class="text-purple" style="font-weight: bold; font-size: 1.2rem;" id="random-total-display">Rp 0
+                </div>
+            </div>
+            <div class="card">
+                <div class="form-row-large">
+                    <div class="input-group-col"><label class="text-muted text-xs">Nama Item</label><input type="text"
+                            id="rand-name" class="input-dark" placeholder="Item"></div>
+                    <div class="input-group-col"><label class="text-muted text-xs">Nominal</label><input type="number"
+                            id="rand-price" class="input-dark" placeholder="Rp"></div>
+                </div>
+                <div class="checkbox-wrapper mt-3"><input type="checkbox" id="cut-balance" checked><label
+                        for="cut-balance">Potong Saldo Utama?</label></div>
+                <button onclick="addRandomExpense()" class="btn-full-purple mt-3">Simpan</button>
+                <ul id="random-list" class="maintenance-list mt-4"></ul>
+            </div>
+        </div>
+
+        <div id="view-journal" class="view-section" style="display:none;">
+            <div class="card highlight-card mb-4" style="border-left:4px solid #fff">
+                <div class="highlight-content">
+                    <h2>
+                        <i class="fa-solid fa-pen"></i>
+                        Journal
+                    </h2>
+                </div>
+            </div>
+            <div class="card mb-4"><textarea id="journal-input" class="input-dark" rows="4"></textarea><button
+                    onclick="addJournal()" class="btn-full-purple mt-2">Simpan</button></div>
+            <div id="journal-list" class="timeline-container"></div>
+        </div>
+
+        <div id="view-settings" class="view-section" style="display: none;">
+            <div class="card highlight-card mb-4" style="border-left: 4px solid #aaa;">
+                <div class="highlight-content">
+                    <h2>
+                        <i class="fa-solid fa-gear"></i>
+                        Settings
+                    </h2>
+                    <p class="text-muted">Personalisasi sistem.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <ul class="settings-list">
+                    <li class="list-item-modern" onclick="toggleTheme()"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 15px 0;">
+                        <span style="font-weight: 500;"><i class="fa-solid fa-lightbulb"></i> Mode Terang</span>
+                        <div class="toggle-switch" id="theme-toggle-icon">OFF</div>
+                    </li>
+
+                    <li class="list-item-modern" onclick="hardReset()"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: none;">
+                        <span style="color: #ff5252; font-weight: 500;"><i class="fa-solid fa-trash"></i> Reset Semua
+                            Data</span>
+                        <span style="color: #666;">></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
